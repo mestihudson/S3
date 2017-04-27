@@ -127,7 +127,7 @@ errorDescription) {
     });
 }
 
-describe.only('objectPutPart API with multiple backends', () => {
+describe('objectPutPart API with multiple backends', () => {
     afterEach(() => {
         cleanup();
     });
@@ -155,7 +155,7 @@ describe.only('objectPutPart API with multiple backends', () => {
         });
     });
 
-    it('should put a part to AWS based on mpu location', done => {
+    it.only('should put a part to AWS based on mpu location', done => {
         putPart('file', 'aws-test', null, 'localhost', uploadId => {
             assert.deepStrictEqual(ds, []);
             s3.abortMultipartUpload({ Bucket: 'multitester444',
