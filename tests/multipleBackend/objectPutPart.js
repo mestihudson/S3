@@ -155,7 +155,7 @@ describe('objectPutPart API with multiple backends', () => {
         });
     });
 
-    it.only('should put a part to AWS based on mpu location', done => {
+    it('should put a part to AWS based on mpu location', done => {
         putPart('file', 'aws-test', null, 'localhost', uploadId => {
             assert.deepStrictEqual(ds, []);
             s3.abortMultipartUpload({ Bucket: 'multitester444',

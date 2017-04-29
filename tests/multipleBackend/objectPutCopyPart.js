@@ -128,7 +128,7 @@ errorDescription) {
     });
 }
 
-describe('ObjectCopyPutPart API with multiple backends', () => {
+describe.skip('ObjectCopyPutPart API with multiple backends', () => {
     afterEach(() => {
         cleanup();
     });
