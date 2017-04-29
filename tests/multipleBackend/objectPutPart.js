@@ -191,11 +191,11 @@ describe('objectPutPart API with multiple backends', () => {
 
     it('should put a part to AWS based on bucket location', done => {
         putPart('aws-test', null, null, 'localhost',
-        (uploadId) => {
+        uploadId => {
             assert.deepStrictEqual(ds, []);
             const params = { Bucket: 'multitester444', Key: objectName,
             UploadId: uploadId };
-            s3.listParts(params, (err, data) => {
+            s3.listParts(params, err => {
                 assert.equal(err, null, `Error listing parts: ${err}`);
                 s3.abortMultipartUpload(params, err => {
                     assert.equal(err, null, `Error aborting MPU: ${err}. ` +
