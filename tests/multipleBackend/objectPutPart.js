@@ -158,11 +158,16 @@ describe('objectPutPart API with multiple backends', () => {
     it('should put a part to AWS based on mpu location', done => {
         putPart('file', 'aws-test', null, 'localhost', uploadId => {
             assert.deepStrictEqual(ds, []);
-            s3.abortMultipartUpload({ Bucket: 'multitester444',
-            Key: objectName, UploadId: uploadId }, err => {
-                assert.equal(err, null, `Error aborting MPU: ${err}. ` +
-                `You must abort MPU with upload ID ${uploadId} manually.`);
-                done();
+            const params = { Bucket: 'multitester444', Key: objectName,
+            UploadId: uploadId };
+            s3.listParts(params, (err, data) => {
+                assert.equal(err, null, `Error listing parts: ${err}`);
+                assert.strictEqual(data.Parts.length, 1);
+                s3.abortMultipartUpload(params, err => {
+                    assert.equal(err, null, `Error aborting MPU: ${err}. ` +
+                    `You must abort MPU with upload ID ${uploadId} manually.`);
+                    done();
+                });
             });
         });
     });
@@ -195,8 +200,9 @@ describe('objectPutPart API with multiple backends', () => {
             assert.deepStrictEqual(ds, []);
             const params = { Bucket: 'multitester444', Key: objectName,
             UploadId: uploadId };
-            s3.listParts(params, err => {
+            s3.listParts(params, (err, data) => {
                 assert.equal(err, null, `Error listing parts: ${err}`);
+                assert.strictEqual(data.Parts.length, 1);
                 s3.abortMultipartUpload(params, err => {
                     assert.equal(err, null, `Error aborting MPU: ${err}. ` +
                     `You must abort MPU with upload ID ${uploadId} manually.`);
