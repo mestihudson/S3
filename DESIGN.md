@@ -58,15 +58,15 @@ users have to specify that version in the query, such as
 A bucket can be non-versioning or versioning. The version of the objects of a
 bucket before it was versioning-enabled are called the "null" version; these
 versions are kept when a bucket is versioning enabled and are identified with
-the version identifier as "null". Turning off the versioning of a bucket would
-make all operations target the "null" versions of the objects, but would not
-delete all existing versions.
+the version identifier as "null". Suspending the versioning of a bucket would
+result in the overwrite of any previous null version when a new version is put,
+but would not delete all existing versions.
 
 ### Implementation of Bucket Versioning in S3
 
 Each version of an object is stored as a separate key in metadata that
 corresponds to the data of the version in the datastore. The API component of
-S3 manages the putting and delete of version data, sends instructions to create,
+S3 manages the put and delete of version data, sends instructions to create,
 retrieve, overwrite or delete a version's metadata to the metadata backend, and
 tracks extra information about a version, such as whether it is a delete marker
 or a null version.
@@ -149,7 +149,7 @@ version of an object has to:
 
 ##### GET
 
--  no options: original DELETE operation, will get the master version
+-  no options: original GET operation, will get the master version
 - `versionId: <versionId>` retrieve a specific version
 
 The implementation of a GET operation does not change compared to the standard
@@ -246,6 +246,8 @@ Right now, the following operations are implemented:
 - Put Bucket Website
 - Get Bucket Website
 - Delete Bucket Website
+- Put Bucket Versioning
+- Get Bucket Versioning
 - v2 Authentication
 - v4 Authentication (Transferring Payload in a Single Chunk)
 - v4 Authentication (Transferring Payload in Multiple Chunks)
