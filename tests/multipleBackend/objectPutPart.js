@@ -107,21 +107,23 @@ errorDescription) {
         const partReq = new DummyRequest(partReqParams, body);
         return objectPutPart(authInfo, partReq, undefined, log, err => {
             assert.strictEqual(err, null);
-            const keysInMPUkeyMap = [];
-            metadata.keyMaps.get(mpuBucket).forEach((val, key) => {
-                keysInMPUkeyMap.push(key);
-            });
-            const sortedKeyMap = keysInMPUkeyMap.sort(a => {
-                if (a.slice(0, 8) === 'overview') {
-                    return -1;
-                }
-                return 0;
-            });
-            const partKey = sortedKeyMap[1];
-            const partETag = metadata.keyMaps.get(mpuBucket)
-                                                .get(partKey)['content-md5'];
-            assert.strictEqual(keysInMPUkeyMap.length, 2);
-            assert.strictEqual(partETag, calculatedHash);
+            if (bucketLoc !== 'aws-test' && mpuLoc !== 'aws-test') {
+                const keysInMPUkeyMap = [];
+                metadata.keyMaps.get(mpuBucket).forEach((val, key) => {
+                    keysInMPUkeyMap.push(key);
+                });
+                const sortedKeyMap = keysInMPUkeyMap.sort(a => {
+                    if (a.slice(0, 8) === 'overview') {
+                        return -1;
+                    }
+                    return 0;
+                });
+                const partKey = sortedKeyMap[1];
+                const partETag = metadata.keyMaps.get(mpuBucket)
+                                .get(partKey)['content-md5'];
+                assert.strictEqual(keysInMPUkeyMap.length, 2);
+                assert.strictEqual(partETag, calculatedHash);
+            }
             cb(testUploadId);
         });
     });
