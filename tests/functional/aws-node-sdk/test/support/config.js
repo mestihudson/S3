@@ -44,7 +44,7 @@ function _getMemCredentials(profile) {
 }
 
 function _getAwsCredentials(profile) {
-    const filename = path.join(process.env.HOME, '/.aws/scality');
+    const filename = path.join(process.env.HOME, '/.aws/bennettbuchanan');
 
     try {
         fs.statSync(filename);
